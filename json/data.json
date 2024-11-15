@@ -1,0 +1,194 @@
+[
+    {
+        "name": ".eslintrc.json",
+        "path": ".eslintrc.json",
+        "sha": "bffb357a7122523ec94045523758c4b825b448ef",
+        "size": 40,
+        "url": "https://api.github.com/repos/collectivewinca/mixy/contents/.eslintrc.json?ref=master",
+        "html_url": "https://github.com/collectivewinca/mixy/blob/master/.eslintrc.json",
+        "git_url": "https://api.github.com/repos/collectivewinca/mixy/git/blobs/bffb357a7122523ec94045523758c4b825b448ef",
+        "download_url": "https://raw.githubusercontent.com/collectivewinca/mixy/master/.eslintrc.json",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/collectivewinca/mixy/contents/.eslintrc.json?ref=master",
+            "git": "https://api.github.com/repos/collectivewinca/mixy/git/blobs/bffb357a7122523ec94045523758c4b825b448ef",
+            "html": "https://github.com/collectivewinca/mixy/blob/master/.eslintrc.json"
+        }
+    },
+    {
+        "name": ".gitignore",
+        "path": ".gitignore",
+        "sha": "fd3dbb571a12a1c3baf000db049e141c888d05a8",
+        "size": 391,
+        "url": "https://api.github.com/repos/collectivewinca/mixy/contents/.gitignore?ref=master",
+        "html_url": "https://github.com/collectivewinca/mixy/blob/master/.gitignore",
+        "git_url": "https://api.github.com/repos/collectivewinca/mixy/git/blobs/fd3dbb571a12a1c3baf000db049e141c888d05a8",
+        "download_url": "https://raw.githubusercontent.com/collectivewinca/mixy/master/.gitignore",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/collectivewinca/mixy/contents/.gitignore?ref=master",
+            "git": "https://api.github.com/repos/collectivewinca/mixy/git/blobs/fd3dbb571a12a1c3baf000db049e141c888d05a8",
+            "html": "https://github.com/collectivewinca/mixy/blob/master/.gitignore"
+        }
+    },
+    {
+        "name": "README.md",
+        "path": "README.md",
+        "sha": "0dc9ea2bcc4104b736ec1c0cf6e6e0d8d82ab07d",
+        "size": 1382,
+        "url": "https://api.github.com/repos/collectivewinca/mixy/contents/README.md?ref=master",
+        "html_url": "https://github.com/collectivewinca/mixy/blob/master/README.md",
+        "git_url": "https://api.github.com/repos/collectivewinca/mixy/git/blobs/0dc9ea2bcc4104b736ec1c0cf6e6e0d8d82ab07d",
+        "download_url": "https://raw.githubusercontent.com/collectivewinca/mixy/master/README.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/collectivewinca/mixy/contents/README.md?ref=master",
+            "git": "https://api.github.com/repos/collectivewinca/mixy/git/blobs/0dc9ea2bcc4104b736ec1c0cf6e6e0d8d82ab07d",
+            "html": "https://github.com/collectivewinca/mixy/blob/master/README.md"
+        }
+    },
+    {
+        "name": "app",
+        "path": "app",
+        "sha": "948a234c4512e253639158998bf6b8c3246ee965",
+        "size": 0,
+        "url": "https://api.github.com/repos/collectivewinca/mixy/contents/app?ref=master",
+        "html_url": "https://github.com/collectivewinca/mixy/tree/master/app",
+        "git_url": "https://api.github.com/repos/collectivewinca/mixy/git/trees/948a234c4512e253639158998bf6b8c3246ee965",
+        "download_url": null,
+        "type": "dir",
+        "_links": {
+            "self": "https://api.github.com/repos/collectivewinca/mixy/contents/app?ref=master",
+            "git": "https://api.github.com/repos/collectivewinca/mixy/git/trees/948a234c4512e253639158998bf6b8c3246ee965",
+            "html": "https://github.com/collectivewinca/mixy/tree/master/app"
+        }
+    },
+    {
+        "name": "components",
+        "path": "components",
+        "sha": "3be819134ff2698d50dce71bd8a323a2f280885d",
+        "size": 0,
+        "url": "https://api.github.com/repos/collectivewinca/mixy/contents/components?ref=master",
+        "html_url": "https://github.com/collectivewinca/mixy/tree/master/components",
+        "git_url": "https://api.github.com/repos/collectivewinca/mixy/git/trees/3be819134ff2698d50dce71bd8a323a2f280885d",
+        "download_url": null,
+        "type": "dir",
+        "_links": {
+            "self": "https://api.github.com/repos/collectivewinca/mixy/contents/components?ref=master",
+            "git": "https://api.github.com/repos/collectivewinca/mixy/git/trees/3be819134ff2698d50dce71bd8a323a2f280885d",
+            "html": "https://github.com/collectivewinca/mixy/tree/master/components"
+        }
+    },
+    {
+        "name": "jsconfig.json",
+        "path": "jsconfig.json",
+        "sha": "2a2e4b3bf8ba1c86d96fc2f5786597ad77a0e5e9",
+        "size": 73,
+        "url": "https://api.github.com/repos/collectivewinca/mixy/contents/jsconfig.json?ref=master",
+        "html_url": "https://github.com/collectivewinca/mixy/blob/master/jsconfig.json",
+        "git_url": "https://api.github.com/repos/collectivewinca/mixy/git/blobs/2a2e4b3bf8ba1c86d96fc2f5786597ad77a0e5e9",
+        "download_url": "https://raw.githubusercontent.com/collectivewinca/mixy/master/jsconfig.json",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/collectivewinca/mixy/contents/jsconfig.json?ref=master",
+            "git": "https://api.github.com/repos/collectivewinca/mixy/git/blobs/2a2e4b3bf8ba1c86d96fc2f5786597ad77a0e5e9",
+            "html": "https://github.com/collectivewinca/mixy/blob/master/jsconfig.json"
+        }
+    },
+    {
+        "name": "next.config.mjs",
+        "path": "next.config.mjs",
+        "sha": "4678774e6d606704bce1897a5dab960cd798bf66",
+        "size": 92,
+        "url": "https://api.github.com/repos/collectivewinca/mixy/contents/next.config.mjs?ref=master",
+        "html_url": "https://github.com/collectivewinca/mixy/blob/master/next.config.mjs",
+        "git_url": "https://api.github.com/repos/collectivewinca/mixy/git/blobs/4678774e6d606704bce1897a5dab960cd798bf66",
+        "download_url": "https://raw.githubusercontent.com/collectivewinca/mixy/master/next.config.mjs",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/collectivewinca/mixy/contents/next.config.mjs?ref=master",
+            "git": "https://api.github.com/repos/collectivewinca/mixy/git/blobs/4678774e6d606704bce1897a5dab960cd798bf66",
+            "html": "https://github.com/collectivewinca/mixy/blob/master/next.config.mjs"
+        }
+    },
+    {
+        "name": "package-lock.json",
+        "path": "package-lock.json",
+        "sha": "dbe3f8c4679c6b291585adf1bf4b2001726c5f8f",
+        "size": 178654,
+        "url": "https://api.github.com/repos/collectivewinca/mixy/contents/package-lock.json?ref=master",
+        "html_url": "https://github.com/collectivewinca/mixy/blob/master/package-lock.json",
+        "git_url": "https://api.github.com/repos/collectivewinca/mixy/git/blobs/dbe3f8c4679c6b291585adf1bf4b2001726c5f8f",
+        "download_url": "https://raw.githubusercontent.com/collectivewinca/mixy/master/package-lock.json",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/collectivewinca/mixy/contents/package-lock.json?ref=master",
+            "git": "https://api.github.com/repos/collectivewinca/mixy/git/blobs/dbe3f8c4679c6b291585adf1bf4b2001726c5f8f",
+            "html": "https://github.com/collectivewinca/mixy/blob/master/package-lock.json"
+        }
+    },
+    {
+        "name": "package.json",
+        "path": "package.json",
+        "sha": "84162595bf3b358b8e690f7d5e94aa896aafce08",
+        "size": 523,
+        "url": "https://api.github.com/repos/collectivewinca/mixy/contents/package.json?ref=master",
+        "html_url": "https://github.com/collectivewinca/mixy/blob/master/package.json",
+        "git_url": "https://api.github.com/repos/collectivewinca/mixy/git/blobs/84162595bf3b358b8e690f7d5e94aa896aafce08",
+        "download_url": "https://raw.githubusercontent.com/collectivewinca/mixy/master/package.json",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/collectivewinca/mixy/contents/package.json?ref=master",
+            "git": "https://api.github.com/repos/collectivewinca/mixy/git/blobs/84162595bf3b358b8e690f7d5e94aa896aafce08",
+            "html": "https://github.com/collectivewinca/mixy/blob/master/package.json"
+        }
+    },
+    {
+        "name": "postcss.config.mjs",
+        "path": "postcss.config.mjs",
+        "sha": "1a69fd2a450afc3bf47e08b22c149190df0ffdb4",
+        "size": 135,
+        "url": "https://api.github.com/repos/collectivewinca/mixy/contents/postcss.config.mjs?ref=master",
+        "html_url": "https://github.com/collectivewinca/mixy/blob/master/postcss.config.mjs",
+        "git_url": "https://api.github.com/repos/collectivewinca/mixy/git/blobs/1a69fd2a450afc3bf47e08b22c149190df0ffdb4",
+        "download_url": "https://raw.githubusercontent.com/collectivewinca/mixy/master/postcss.config.mjs",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/collectivewinca/mixy/contents/postcss.config.mjs?ref=master",
+            "git": "https://api.github.com/repos/collectivewinca/mixy/git/blobs/1a69fd2a450afc3bf47e08b22c149190df0ffdb4",
+            "html": "https://github.com/collectivewinca/mixy/blob/master/postcss.config.mjs"
+        }
+    },
+    {
+        "name": "public",
+        "path": "public",
+        "sha": "2b05fc7d38a421761595f40d1a94d27090388f17",
+        "size": 0,
+        "url": "https://api.github.com/repos/collectivewinca/mixy/contents/public?ref=master",
+        "html_url": "https://github.com/collectivewinca/mixy/tree/master/public",
+        "git_url": "https://api.github.com/repos/collectivewinca/mixy/git/trees/2b05fc7d38a421761595f40d1a94d27090388f17",
+        "download_url": null,
+        "type": "dir",
+        "_links": {
+            "self": "https://api.github.com/repos/collectivewinca/mixy/contents/public?ref=master",
+            "git": "https://api.github.com/repos/collectivewinca/mixy/git/trees/2b05fc7d38a421761595f40d1a94d27090388f17",
+            "html": "https://github.com/collectivewinca/mixy/tree/master/public"
+        }
+    },
+    {
+        "name": "tailwind.config.js",
+        "path": "tailwind.config.js",
+        "sha": "c694a8802b642ba2b913e084fce3bfc150af0b4e",
+        "size": 838,
+        "url": "https://api.github.com/repos/collectivewinca/mixy/contents/tailwind.config.js?ref=master",
+        "html_url": "https://github.com/collectivewinca/mixy/blob/master/tailwind.config.js",
+        "git_url": "https://api.github.com/repos/collectivewinca/mixy/git/blobs/c694a8802b642ba2b913e084fce3bfc150af0b4e",
+        "download_url": "https://raw.githubusercontent.com/collectivewinca/mixy/master/tailwind.config.js",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/collectivewinca/mixy/contents/tailwind.config.js?ref=master",
+            "git": "https://api.github.com/repos/collectivewinca/mixy/git/blobs/c694a8802b642ba2b913e084fce3bfc150af0b4e",
+            "html": "https://github.com/collectivewinca/mixy/blob/master/tailwind.config.js"
+        }
+    }
+]

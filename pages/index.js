@@ -200,7 +200,7 @@ export default function GitHubSync() {
       for (const change of changes) {
         try {
           const content = Buffer.from(change.content).toString('base64');
-          const message = `Update ${change.path} [RepoSync]`;
+          const message = `Update ${change.path} [BoltSync]`;
 
           if (change.type === 'modified') {
             await octokit.repos.createOrUpdateFileContents({

@@ -270,7 +270,7 @@ export default function GitHubSync() {
 
       {/* Main Content */}
       <div className="max-w-5xl mx-auto">
-        <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden border border-gray-700">
+        <div className="bg-black/30 backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden border border-gray-700">
           {!session ? (
             <div className="p-8 text-center space-y-6">
               {/* Instructions for non-authenticated users */}
@@ -338,28 +338,32 @@ export default function GitHubSync() {
                   ))}
                 </select>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <a
-                      href={`https://github.com/${selectedRepo}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 bg-gradient-to-r from-gray-700 to-gray-800 text-white py-3 px-4 rounded-xl hover:from-gray-800 hover:to-gray-900 transition-all duration-200 font-medium"
-                    >
-                      <Github className="w-5 h-5" />
-                      View on GitHub
-                    </a>
-                    <a
-                      href={`https://bolt.new/~/github.com/${selectedRepo}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-4 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 font-medium"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                      Open in Bolt
-                    </a>
-                  </div>
+                {selectedRepo && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <a
+                    href={`https://github.com/${selectedRepo}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 bg-gradient-to-r from-gray-700 to-gray-800 text-white py-3 px-4 rounded-xl hover:from-gray-800 hover:to-gray-900 transition-all duration-200 font-medium"
+                  >
+                    <Github className="w-5 h-5" />
+                    View on GitHub
+                  </a>
+                  <a
+                    href={`https://bolt.new/~/github.com/${selectedRepo}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-4 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 font-medium"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    Open in Bolt
+                  </a>
+                </div>
+                )}
+
+                
 
                 {selectedRepo && (
                   <div className="space-y-6">
@@ -442,7 +446,7 @@ export default function GitHubSync() {
         </div>
 
         {/* Instructions Section */}
-        <div className="mt-8 bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-gray-700">
+        <div className="mt-8 bg-black/30 backdrop-blur-lg rounded-2xl p-8 border border-gray-700">
           <h2 className="text-2xl font-bold text-white mb-6">How to Use BoltSync</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <ol className="space-y-4 text-gray-300">

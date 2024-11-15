@@ -338,8 +338,11 @@ export default function GitHubSync() {
                     </option>
                   ))}
                 </select>
-                <div className=' text-white my-1 font-medium'>
+                <div className=' text-white text-sm my-1 '>
                   NOTE : bolt.new only supports public repositories as of now
+                </div>
+                <div className=' text-white my-1 text-sm'>
+                  NOTE : If You are not able to see your repository, Sign out and click install app again, then select that specific repository.
                 </div>
                 </div>
                 
@@ -486,6 +489,11 @@ export default function GitHubSync() {
               ))}
             </ol>
           </div>
+        </div>
+
+        <div className="mt-8 bg-black/30 backdrop-blur-lg rounded-2xl p-8 border border-gray-700">
+          <h2 className="text-2xl text-center font-bold text-white mb-6">Video Demo</h2>
+          
         </div>
 
         <div className="mt-8 text-center text-gray-400 pb-8">

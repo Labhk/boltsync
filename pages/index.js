@@ -325,6 +325,7 @@ export default function GitHubSync() {
 
               {/* Repository Selection */}
               <div className="space-y-6">
+                <div>
                 <select
                   value={selectedRepo}
                   onChange={(e) => handleRepoSelect(e.target.value)}
@@ -337,6 +338,11 @@ export default function GitHubSync() {
                     </option>
                   ))}
                 </select>
+                <div className=' text-white my-1 font-medium'>
+                  NOTE : bolt.new only supports public repositories as of now.
+                </div>
+                </div>
+                
 
                 {selectedRepo && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

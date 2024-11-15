@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Octokit } from "@octokit/rest";
 import JSZip from 'jszip';
+import { Github, Heart } from 'lucide-react';
 
 export default function GitHubSync() {
   const { data: session } = useSession();
@@ -61,8 +62,6 @@ export default function GitHubSync() {
   }, [octokit]);
   
 
-  console.log("session", session);
-
 
   // Handle repository selection
   const handleRepoSelect = async (repoFullName) => {
@@ -111,7 +110,7 @@ export default function GitHubSync() {
   };
 
   const handleGitHubAppInstall = () => {
-    window.open("https://github.com/apps/reposync7x/installations/new", "_blank"); // Open in new tab
+    window.open("https://github.com/apps/boltsync/installations/new", "_blank"); // Open in new tab
   };
 
   // Handle zip file upload
@@ -251,48 +250,85 @@ export default function GitHubSync() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
-        <div className="p-8">
-          <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
-            RepoSync
-          </h1>
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 p-4 md:p-8">
+      {/* Header Section */}
+      <div className="max-w-5xl mx-auto mb-8">
+        <div className="bg-black/30 rounded-2xl p-8 backdrop-blur-lg border border-gray-700">
+          <div className="flex items-center justify-center space-x-4 mb-6">
+            <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h1 className="text-4xl font-bold text-white">BoltSync</h1>
+          </div>
+          <p className="text-gray-300 text-center max-w-2xl mx-auto">
+            Seamlessly sync your GitHub repositories with Bolt's AI-powered development environment
+          </p>
+        </div>
+      </div>
 
+      {/* Main Content */}
+      <div className="max-w-5xl mx-auto">
+        <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden border border-gray-700">
           {!session ? (
-            <div className="text-center">
-              <div className='mb-2'>Please Install Github App before proceeding with signIn. You only needed to install once</div>
-              <button
-                onClick={handleGitHubAppInstall}
-                className="py-3 px-6 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-              >
-                Install GitHub App
-              </button>
-              <button
-                onClick={() => signIn("github")}
-                className="ml-2 bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors"
-              >
-                Sign in with GitHub
-              </button>
+            <div className="p-8 text-center space-y-6">
+              {/* Instructions for non-authenticated users */}
+              <div className="max-w-2xl mx-auto bg-gray-800/50 rounded-xl p-6">
+                <h2 className="text-xl font-semibold text-white mb-4">Getting Started</h2>
+                <ol className="text-gray-300 text-left space-y-4">
+                  <li className="flex items-start">
+                    <span className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">1</span>
+                    <span>Install the GitHub App (one-time setup)</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">2</span>
+                    <span>Sign in with your GitHub account</span>
+                  </li>
+                </ol>
+              </div>
+              
+              <div className="flex justify-center gap-4">
+                <button
+                  onClick={handleGitHubAppInstall}
+                  className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-blue-500/25"
+                >
+                  Install GitHub App
+                </button>
+                <button
+                  onClick={() => signIn("github")}
+                  className="px-6 py-3 bg-gradient-to-r from-gray-800 to-gray-900 text-white font-medium rounded-xl hover:from-gray-900 hover:to-black transition-all duration-200 shadow-lg hover:shadow-gray-800/25 flex items-center gap-2"
+                >
+                  <Github className="w-5 h-5" />
+                  Sign in with GitHub
+                </button>
+              </div>
             </div>
           ) : (
-            <div className="space-y-6">
-              <div className="flex justify-between items-center">
-                <p className="text-gray-600">
-                  Signed in as {session.user?.name}
-                </p>
+            <div className="p-8 space-y-6">
+              {/* Authenticated User Header */}
+              <div className="flex justify-between items-center pb-6 border-b border-gray-700">
+                <div className="flex items-center space-x-4">
+                  <img src={session.user?.image} alt="Profile" className="w-10 h-10 rounded-full" />
+                  <div>
+                    <p className="text-white font-medium">{session.user?.name}</p>
+                    <p className="text-gray-400 text-sm">{session.user?.email}</p>
+                  </div>
+                </div>
                 <button
                   onClick={() => signOut()}
-                  className="text-red-600 hover:text-red-800"
+                  className="px-4 py-2 text-gray-300 hover:text-white hover:bg-red-500/20 rounded-lg transition-colors"
                 >
                   Sign Out
                 </button>
               </div>
 
-              <div className="space-y-4">
+              {/* Repository Selection */}
+              <div className="space-y-6">
                 <select
                   value={selectedRepo}
                   onChange={(e) => handleRepoSelect(e.target.value)}
-                  className="w-full p-2 border rounded-md"
+                  className="w-full p-3 bg-gray-800 text-white border border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="">Select a repository</option>
                   {repos.map((repo) => (
@@ -302,89 +338,160 @@ export default function GitHubSync() {
                   ))}
                 </select>
 
-                {selectedRepo && (
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-semibold">Upload a zip file</h3>
-                    <input
-                      type="file"
-                      accept=".zip"
-                      onChange={handleZipUpload}
-                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                    />
-
-                    <button
-                      onClick={() => detectChanges(uploadedFiles)}
-                      disabled={isZipProcessing || isRepoFetching || Object.keys(uploadedFiles).length === 0}
-                      className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400"
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <a
+                      href={`https://github.com/${selectedRepo}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 bg-gradient-to-r from-gray-700 to-gray-800 text-white py-3 px-4 rounded-xl hover:from-gray-800 hover:to-gray-900 transition-all duration-200 font-medium"
                     >
-                      Detect Changes
-                    </button>
+                      <Github className="w-5 h-5" />
+                      View on GitHub
+                    </a>
+                    <a
+                      href={`https://bolt.new/~/github.com/${selectedRepo}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-4 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 font-medium"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                      Open in Bolt
+                    </a>
+                  </div>
+
+                {selectedRepo && (
+                  <div className="space-y-6">
+                    <div className="bg-gray-800/50 rounded-xl p-6">
+                      <h3 className="text-lg font-semibold text-white mb-4">Upload Bolt Downloaded Zip File</h3>
+                      <input
+                        type="file"
+                        accept=".zip"
+                        onChange={handleZipUpload}
+                        className="block w-full text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 cursor-pointer"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <button
+                        onClick={() => detectChanges(uploadedFiles)}
+                        disabled={isZipProcessing || isRepoFetching || Object.keys(uploadedFiles).length === 0}
+                        className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-4 rounded-xl hover:from-blue-600 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium"
+                      >
+                        Detect Changes
+                      </button>
+                      
+                      <button
+                        onClick={handleFetchRepoFilesAgain}
+                        disabled={isRepoFetching}
+                        className="w-full bg-gradient-to-r from-gray-700 to-gray-800 text-white py-3 px-4 rounded-xl hover:from-gray-800 hover:to-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium"
+                      >
+                        Fetch Latest Files
+                      </button>
+                    </div>
 
                     {changes.length > 0 && (
-                      <div className="space-y-4">
-                        <h3 className="text-lg font-semibold">Detected Changes:</h3>
-                        <div className="max-h-60 overflow-y-auto">
+                      <div className="bg-gray-800/50 rounded-xl p-6">
+                        <h3 className="text-lg font-semibold text-white mb-4">Detected Changes</h3>
+                        <div className="max-h-60 overflow-y-auto space-y-2">
                           {changes.map((change, index) => (
-                            <div key={index} className="p-2 bg-gray-50 rounded-md flex items-center">
-                              <span className={`mr-2 px-2 py-1 rounded-md text-sm ${change.type === 'modified' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}`}>
+                            <div key={index} className="p-3 bg-gray-800 rounded-lg flex items-center">
+                              <span className={`mr-3 px-3 py-1 rounded-md text-sm ${
+                                change.type === 'modified' 
+                                  ? 'bg-yellow-500/20 text-yellow-300' 
+                                  : 'bg-green-500/20 text-green-300'
+                              }`}>
                                 {change.type}
                               </span>
-                              <span className="text-gray-600">{change.path}</span>
+                              <span className="text-gray-300 truncate">{change.path}</span>
                             </div>
                           ))}
                         </div>
                         <button
                           onClick={pushChanges}
                           disabled={isProcessing}
-                          className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 disabled:bg-gray-400"
+                          className="mt-4 w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 px-4 rounded-xl hover:from-green-600 hover:to-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium"
                         >
                           Push Changes to GitHub
                         </button>
                       </div>
                     )}
 
-                    {/* Button to fetch repo files again */}
-                    <button
-                      onClick={handleFetchRepoFilesAgain}
-                      disabled={isRepoFetching}
-                      className="w-full bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700 disabled:bg-gray-400"
-                    >
-                      Fetch Repository Files Again
-                    </button>
-
-                    {/* Link to GitHub Repo after successful push */}
                     
-                      <div className='flex gap-2'>
-                      <a
-                        href={`https://github.com/${selectedRepo}`}
-                        target="_blank"
-                        className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 text-center inline-block"
-                      >
-                        Go to GitHub Repo
-                      </a>
-                       <a
-                       href={`https://bolt.new/~/github.com/${selectedRepo}`}
-                       target="_blank"
-                       className="w-full bg-gray-800 text-white py-2 px-4 rounded-md hover:bg-graylue-700 text-center inline-block"
-                     >
-                       Open Repo in Bolt
-                     </a>
-                      </div>
                   </div>
                 )}
 
-                {/* Status updates */}
                 {status && (
-                  <div className={`p-4 rounded-md ${status.includes('Error') ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}`}>
-                    {isRepoFetching && (
-                      <div className="animate-spin inline-block w-4 h-4 border-2 border-current rounded-full mr-2 border-t-transparent" />
-                    )}
-                    {status}
+                  <div className={`p-4 rounded-xl ${
+                    status.includes('Error') 
+                      ? 'bg-red-500/20 text-red-300' 
+                      : 'bg-blue-500/20 text-blue-300'
+                  }`}>
+                    <div className="flex items-center gap-3">
+                      {(isRepoFetching || isProcessing) && (
+                        <div className="animate-spin w-5 h-5 border-2 border-current rounded-full border-t-transparent" />
+                      )}
+                      {status}
+                    </div>
                   </div>
                 )}
               </div>
             </div>
           )}
+        </div>
+
+        {/* Instructions Section */}
+        <div className="mt-8 bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-gray-700">
+          <h2 className="text-2xl font-bold text-white mb-6">How to Use BoltSync</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <ol className="space-y-4 text-gray-300">
+              {[
+                "Install the GitHub App once, then sign in with GitHub.",
+                "Select your repository from the list.",
+                "Click 'Open with Bolt' to start working.",
+                "Make changes using Bolt prompts, then download your project."
+              ].map((step, index) => (
+                <li key={index} className="flex items-start">
+                  <span className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">
+                    {index + 1}
+                  </span>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ol>
+            <ol className="space-y-4 text-gray-300" start="5">
+              {[
+                "Return to BoltSync and upload the zip file.",
+                "Review detected changes before pushing.",
+                "Click 'Push Changes' to update GitHub.",
+                "Fetch latest files before making new changes."
+              ].map((step, index) => (
+                <li key={index} className="flex items-start">
+                  <span className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">
+                    {index + 5}
+                  </span>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+
+        <div className="mt-8 text-center text-gray-400 pb-8">
+          <div className="flex items-center justify-center gap-2">
+            <span>Made with</span>
+            <Heart className="w-5 h-5 text-red-500 animate-pulse" />
+            <span>by</span>
+            <a 
+              href="https://github.com/labhk" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors duration-200"
+            >
+              <Github className="w-4 h-4" />
+            </a>
+          </div>
         </div>
       </div>
     </div>

@@ -262,8 +262,8 @@ export default function GitHubSync() {
             </div>
             <h1 className="text-4xl font-bold text-white">BoltSync</h1>
           </div>
-          <p className="text-gray-300 text-center max-w-2xl mx-auto">
-            Seamlessly sync your GitHub repositories with Bolt's AI-powered development environment
+          <p className="text-gray-300 text-center max-w-3xl mx-auto">
+            Modify your GitHub repositories with Bolt Prompts & sync changes back to GitHub with BoltSync.
           </p>
         </div>
       </div>

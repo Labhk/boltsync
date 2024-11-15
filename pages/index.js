@@ -339,7 +339,7 @@ export default function GitHubSync() {
                   ))}
                 </select>
                 <div className=' text-white my-1 font-medium'>
-                  NOTE : bolt.new only supports public repositories as of now.
+                  NOTE : bolt.new only supports public repositories as of now
                 </div>
                 </div>
                 

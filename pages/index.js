@@ -344,6 +344,9 @@ export default function GitHubSync() {
                 <div className=' text-white my-1 text-sm'>
                   NOTE : If You are not able to see your repository, Sign out and click install app again, then select that specific repository.
                 </div>
+                <div className=' text-white my-1 text-sm'>
+                  NOTE : If you see this : Failed to fetch repositories: Bad credentials.., Click Sign Out and signIn again.
+                </div>
                 </div>
                 
 

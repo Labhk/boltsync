@@ -491,10 +491,21 @@ export default function GitHubSync() {
           </div>
         </div>
 
-        <div className="mt-8 bg-black/30 backdrop-blur-lg rounded-2xl p-8 border border-gray-700">
-          <h2 className="text-2xl text-center font-bold text-white mb-6">Video Demo</h2>
-          
+        <div class="mt-8 bg-black/30 backdrop-blur-lg rounded-2xl p-8 md:p-12 lg:p-16 border border-gray-700">
+          <h2 class="text-2xl md:text-3xl lg:text-4xl text-center font-bold text-white mb-6">Video Demo</h2>
+          <div class="aspect-video">
+            <iframe
+              class="w-full h-full"
+              src="https://www.youtube.com/embed/IneFM6ViV8s"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
         </div>
+
+
 
         <div className="mt-8 text-center text-gray-400 pb-8">
           <div className="flex items-center justify-center gap-2">

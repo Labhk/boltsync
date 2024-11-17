@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Octokit } from "@octokit/rest";
 import JSZip from 'jszip';
-import { Github, Heart, Search } from 'lucide-react';
+import { Github, Heart } from 'lucide-react';
 
 export default function GitHubSync() {
   const { data: session } = useSession();
   const [octokit, setOctokit] = useState(null);
   const [repos, setRepos] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
   const [selectedRepo, setSelectedRepo] = useState("");
   const [status, setStatus] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -31,6 +30,7 @@ export default function GitHubSync() {
     }
   }, [session]);
 
+  // Fetch repositories when authenticated
   // Fetch repositories when authenticated
   useEffect(() => {
     const fetchRepos = async () => {
@@ -60,11 +60,6 @@ export default function GitHubSync() {
   
     fetchRepos();
   }, [octokit]);
-
-  // Filter repositories based on search term
-  const filteredRepos = repos.filter(repo =>
-    repo.full_name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
   
 
 
@@ -330,41 +325,29 @@ export default function GitHubSync() {
 
               {/* Repository Selection */}
               <div className="space-y-6">
-              <div>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Search className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="Search repositories..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 p-3 bg-gray-800 text-white border border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-2"
-                  />
-                </div>
+                <div>
                 <select
                   value={selectedRepo}
                   onChange={(e) => handleRepoSelect(e.target.value)}
                   className="w-full p-3 bg-gray-800 text-white border border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="">Select a repository</option>
-                  {filteredRepos.map((repo) => (
+                  {repos.map((repo) => (
                     <option key={repo.id} value={repo.full_name}>
                       {repo.full_name}
                     </option>
                   ))}
                 </select>
-                <div className="text-white text-sm my-1">
+                <div className=' text-white text-sm my-1 '>
                   NOTE : bolt.new only supports public repositories as of now
                 </div>
-                <div className="text-white my-1 text-sm">
+                <div className=' text-white my-1 text-sm'>
                   NOTE : If You are not able to see your repository, Sign out and click install app again, then select that specific repository.
                 </div>
-                <div className="text-white my-1 text-sm">
+                <div className=' text-white my-1 text-sm'>
                   NOTE : If you see this : Failed to fetch repositories: Bad credentials.., Click Sign Out and signIn again.
                 </div>
-              </div>
+                </div>
                 
 
                 {selectedRepo && (

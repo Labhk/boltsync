@@ -8,6 +8,7 @@ export default function GitHubSync() {
   const { data: session } = useSession();
   const [octokit, setOctokit] = useState(null);
   const [repos, setRepos] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [selectedRepo, setSelectedRepo] = useState("");
   const [status, setStatus] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);

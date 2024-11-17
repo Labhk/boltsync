@@ -31,7 +31,6 @@ export default function GitHubSync() {
   }, [session]);
 
   // Fetch repositories when authenticated
-  // Fetch repositories when authenticated
   useEffect(() => {
     const fetchRepos = async () => {
       if (!octokit) return;
@@ -60,6 +59,11 @@ export default function GitHubSync() {
   
     fetchRepos();
   }, [octokit]);
+
+  // Filter repositories based on search term
+  const filteredRepos = repos.filter(repo => 
+    repo.full_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   
 
 
@@ -326,27 +330,39 @@ export default function GitHubSync() {
               {/* Repository Selection */}
               <div className="space-y-6">
                 <div>
-                <select
-                  value={selectedRepo}
-                  onChange={(e) => handleRepoSelect(e.target.value)}
-                  className="w-full p-3 bg-gray-800 text-white border border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">Select a repository</option>
-                  {repos.map((repo) => (
-                    <option key={repo.id} value={repo.full_name}>
-                      {repo.full_name}
-                    </option>
-                  ))}
-                </select>
-                <div className=' text-white text-sm my-1 '>
-                  NOTE : bolt.new only supports public repositories as of now
-                </div>
-                <div className=' text-white my-1 text-sm'>
-                  NOTE : If You are not able to see your repository, Sign out and click install app again, then select that specific repository.
-                </div>
-                <div className=' text-white my-1 text-sm'>
-                  NOTE : If you see this : Failed to fetch repositories: Bad credentials.., Click Sign Out and signIn again.
-                </div>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Search className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Search repositories..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full pl-10 p-3 bg-gray-800 text-white border border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-2"
+                    />
+                  </div>
+                  <select
+                    value={selectedRepo}
+                    onChange={(e) => handleRepoSelect(e.target.value)}
+                    className="w-full p-3 bg-gray-800 text-white border border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="">Select a repository</option>
+                    {filteredRepos.map((repo) => (
+                      <option key={repo.id} value={repo.full_name}>
+                        {repo.full_name}
+                      </option>
+                    ))}
+                  </select>
+                  <div className='text-white text-sm my-1'>
+                    NOTE : bolt.new only supports public repositories as of now
+                  </div>
+                  <div className='text-white my-1 text-sm'>
+                    NOTE : If You are not able to see your repository, Sign out and click install app again, then select that specific repository.
+                  </div>
+                  <div className='text-white my-1 text-sm'>
+                    NOTE : If you see this : Failed to fetch repositories: Bad credentials.., Click Sign Out and signIn again.
+                  </div>
                 </div>
                 
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Octokit } from "@octokit/rest";
 import JSZip from 'jszip';
-import { Github, Heart } from 'lucide-react';
+import { Github, Heart, Search } from 'lucide-react';
 
 export default function GitHubSync() {
   const { data: session } = useSession();

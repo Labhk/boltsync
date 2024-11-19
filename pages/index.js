@@ -312,7 +312,6 @@ export default function GitHubSync() {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="max-w-5xl mx-auto">
         <div className="bg-black/30 backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden border border-gray-700">
           {!session ? (

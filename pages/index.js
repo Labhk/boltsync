@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Octokit } from "@octokit/rest";
 import JSZip from 'jszip';
-import { Github, Heart } from 'lucide-react';
+import { Github, Heart, Search, X } from 'lucide-react';
 
 export default function GitHubSync() {
   const { data: session } = useSession();
@@ -16,6 +16,13 @@ export default function GitHubSync() {
   const [uploadedFiles, setUploadedFiles] = useState({});
   const [isRepoFetching, setIsRepoFetching] = useState(false);
   const [isZipProcessing, setIsZipProcessing] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isSearchActive, setIsSearchActive] = useState(false);
+
+  // Filter repositories based on search term
+  const filteredRepos = repos.filter(repo => 
+    repo.full_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   // Initialize Octokit when session is available
   useEffect(() => {
@@ -35,23 +42,46 @@ export default function GitHubSync() {
   useEffect(() => {
     const fetchRepos = async () => {
       if (!octokit) return;
-  
+    
       try {
-        // Fetch personal repositories (owned by the user)
-        const personalRepos = await octokit.repos.listForAuthenticatedUser({
-          affiliation: 'owner'
-        });
-  
-        // Fetch organizational repositories (where the user is a member)
-        const orgRepos = await octokit.repos.listForAuthenticatedUser({
-          affiliation: 'organization_member'
-        });
-  
-        // Combine personal and org repositories
-        const allRepos = [...personalRepos.data, ...orgRepos.data];
-  
-        // Sort repositories by updated_at in descending order (latest first)
+        const fetchAllRepos = async (fetchFn) => {
+          let allRepos = [];
+          let page = 1;
+          let response;
+    
+          do {
+            response = await fetchFn({
+              page,
+              per_page: 100  // Maximum allowed per page
+            });
+    
+            allRepos = [...allRepos, ...response.data];
+            page++;
+          } while (response.data.length === 100);
+    
+          return allRepos;
+        };
+    
+        // Fetch personal repositories
+        const personalRepos = await fetchAllRepos((params) => 
+          octokit.repos.listForAuthenticatedUser({
+            ...params,
+            affiliation: 'owner'
+          })
+        );
+    
+        // Fetch organizational repositories
+        const orgRepos = await fetchAllRepos((params) => 
+          octokit.repos.listForAuthenticatedUser({
+            ...params,
+            affiliation: 'organization_member'
+          })
+        );
+    
+        // Combine and sort repositories
+        const allRepos = [...personalRepos, ...orgRepos];
         const sortedRepos = allRepos.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+        
         setRepos(sortedRepos);
       } catch (error) {
         setStatus("Failed to fetch repositories: " + error.message);
@@ -61,6 +91,7 @@ export default function GitHubSync() {
     fetchRepos();
   }, [octokit]);
   
+  console.log(repos);
 
 
   // Handle repository selection
@@ -262,9 +293,22 @@ export default function GitHubSync() {
             </div>
             <h1 className="text-4xl font-bold text-white">BoltSync</h1>
           </div>
-          <p className="text-gray-300 text-center max-w-3xl mx-auto">
+          <p className="text-gray-300 text-center max-w-3xl mx-auto mb-6">
             Modify your GitHub repositories with Bolt Prompts & sync changes back to GitHub with BoltSync.
           </p>
+          <div className="flex justify-center">
+            <a
+              href="https://github.com/Labhk/BoltSync-Issues/issues/new"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-lg transition-colors duration-200"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <span>Report Issue</span>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -325,29 +369,61 @@ export default function GitHubSync() {
 
               {/* Repository Selection */}
               <div className="space-y-6">
-                <div>
-                <select
-                  value={selectedRepo}
-                  onChange={(e) => handleRepoSelect(e.target.value)}
-                  className="w-full p-3 bg-gray-800 text-white border border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">Select a repository</option>
-                  {repos.map((repo) => (
-                    <option key={repo.id} value={repo.full_name}>
-                      {repo.full_name}
-                    </option>
-                  ))}
-                </select>
-                <div className=' text-white text-sm my-1 '>
-                  NOTE : bolt.new only supports public repositories as of now
+              <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-4">
+          {/* Search Input */}
+              <div className="relative">
+                <div className="flex items-center">
+                  <input 
+                    type="text"
+                    placeholder="Search repo, Open Dropdown -->"
+                    value={searchTerm}
+                    onClick={() => setIsSearchActive(true)}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value);
+                      setIsSearchActive(true);
+                    }}
+                    className="w-full p-3 pr-10 bg-gray-800 text-white border border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                  {searchTerm && (
+                    <button 
+                      onClick={() => {
+                        setSearchTerm('');
+                        setIsSearchActive(false);
+                      }}
+                      className="absolute right-3 text-gray-400 hover:text-white"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  )}
                 </div>
-                <div className=' text-white my-1 text-sm'>
-                  NOTE : If You are not able to see your repository, Sign out and click install app again, then select that specific repository.
-                </div>
-                <div className=' text-white my-1 text-sm'>
-                  NOTE : If you see this : Failed to fetch repositories: Bad credentials.., Click Sign Out and signIn again.
-                </div>
-                </div>
+                
+                {searchTerm && filteredRepos.length === 0 && (
+                  <div className="text-gray-400 mt-2 text-sm">
+                    No repositories found matching "{searchTerm}"
+                  </div>
+                )}
+              </div>
+
+              {/* Repository Select */}
+              <select
+                value={selectedRepo}
+                onChange={(e) => handleRepoSelect(e.target.value)}
+                className="w-full p-3 bg-gray-800 text-white border border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">Select a repository</option>
+                {(isSearchActive ? filteredRepos : repos).map((repo) => (
+                  <option key={repo.id} value={repo.full_name}>
+                    {repo.full_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="text-white text-sm space-y-1">
+              <div>NOTE: bolt.new only supports public repositories as of now</div>
+              <div>NOTE: If you are not able to see your repository, Sign out and click install app again, then select that specific repository.</div>
+              <div>NOTE: If you see "Failed to fetch repositories: Bad credentials..", Click Sign Out and Sign In again.</div>
+            </div>
                 
 
                 {selectedRepo && (

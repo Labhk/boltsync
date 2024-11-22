@@ -420,7 +420,7 @@ export default function GitHubSync() {
 
             <div className="text-white text-sm space-y-1">
               <div>NOTE: bolt.new only supports public repositories as of now</div>
-              <div>NOTE: You Need to download your project(zip file) from bolt.new, then upload it here to push changes in githu</div>
+              <div>NOTE: You Need to download your project(zip file) from bolt.new, then upload it here to push changes in github</div>
               <div>NOTE: If you see "Failed to fetch repositories: Bad credentials..", Click Sign Out and Sign In again.</div>
             </div>
                 

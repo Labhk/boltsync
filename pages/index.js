@@ -420,7 +420,7 @@ export default function GitHubSync() {
 
             <div className="text-white text-sm space-y-1">
               <div>NOTE: bolt.new only supports public repositories as of now</div>
-              <div>NOTE: If you are not able to see your repository, Sign out and click install app again, then select that specific repository.</div>
+              <div>NOTE: You Need to download your project(zip file) from bolt.new, then upload it here to push changes in githu</div>
               <div>NOTE: If you see "Failed to fetch repositories: Bad credentials..", Click Sign Out and Sign In again.</div>
             </div>
                 
@@ -455,7 +455,7 @@ export default function GitHubSync() {
                 {selectedRepo && (
                   <div className="space-y-6">
                     <div className="bg-gray-800/50 rounded-xl p-6">
-                      <h3 className="text-lg font-semibold text-white mb-4">Upload Bolt Downloaded Zip File</h3>
+                      <h3 className="text-lg font-semibold text-white mb-4">Upload Bolt Downloaded Zip File ( Latest update )</h3>
                       <input
                         type="file"
                         accept=".zip"

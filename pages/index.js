@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Octokit } from "@octokit/rest";
 import JSZip from 'jszip';
-import { Github, Heart, Search, X } from 'lucide-react';
+import { Github, Heart, Search, X, Linkedin } from 'lucide-react';
 
 export default function GitHubSync() {
   const { data: session } = useSession();
@@ -162,7 +162,7 @@ export default function GitHubSync() {
       const files = {};
 
       for (const [path, zipEntry] of Object.entries(zipContents.files)) {
-        if (zipEntry.dir || path.startsWith('.next/') || path.includes('.next/') || path.startsWith('dist/') || path.includes('dist/') || path.startsWith('node_modules/') || path.includes('node_modules/') || path.startsWith('public/') || path.includes('public/')) {
+        if (zipEntry.dir || path.startsWith('.next/') || path.includes('.next/') || path.startsWith('public/') || path.includes('public/')) {
           // Skip directories and anything within .next folder
           continue;
         }
@@ -293,10 +293,13 @@ export default function GitHubSync() {
             </div>
             <h1 className="text-4xl font-bold text-white">BoltSync</h1>
           </div>
-          <p className="text-gray-300 text-center max-w-3xl mx-auto mb-6">
+          <p className="text-gray-300 text-center max-w-3xl mx-auto mb-2">
             Modify your GitHub repositories with Bolt Prompts & sync changes back to GitHub with BoltSync.
           </p>
-          <div className="flex justify-center">
+          <p className="text-gray-300 text-center max-w-3xl mx-auto mb-3">
+              Help spread the word! If you find BoltSync useful, please share the LinkedIn post and connect with me.
+            </p>
+          <div className="flex justify-center gap-3">
             <a
               href="https://github.com/Labhk/BoltSync-Issues/issues/new"
               target="_blank"
@@ -307,6 +310,23 @@ export default function GitHubSync() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
               <span>Report Issue</span>
+            </a>
+            <a
+              href="https://www.linkedin.com/posts/labh-k_github-bolt-webdevelopment-activity-7268152010728742912-v4BT"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200"
+            >
+              <Linkedin className="w-4 h-4" />
+              <span>Share BoltSync</span>
+            </a>
+            <a
+              href="https://www.linkedin.com/in/labh-k/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors duration-200"
+            >
+              <span>Connect on LinkedIn</span>
             </a>
           </div>
         </div>
@@ -420,7 +440,7 @@ export default function GitHubSync() {
 
             <div className="text-white text-sm space-y-1">
               <div>NOTE: bolt.new only supports public repositories as of now</div>
-              <div>NOTE: You Need to download your project(zip file) from bolt.new, then upload it here to push changes in github</div>
+              <div>NOTE: If you are not able to see your repository, Sign out and click install app again, then select that specific repository.</div>
               <div>NOTE: If you see "Failed to fetch repositories: Bad credentials..", Click Sign Out and Sign In again.</div>
             </div>
                 
@@ -455,7 +475,7 @@ export default function GitHubSync() {
                 {selectedRepo && (
                   <div className="space-y-6">
                     <div className="bg-gray-800/50 rounded-xl p-6">
-                      <h3 className="text-lg font-semibold text-white mb-4">Upload Bolt Downloaded Zip File ( Latest update )</h3>
+                      <h3 className="text-lg font-semibold text-white mb-4">Upload Bolt Downloaded Zip File</h3>
                       <input
                         type="file"
                         accept=".zip"

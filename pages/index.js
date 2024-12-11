@@ -163,7 +163,7 @@ export default function GitHubSync() {
 
       for (const [path, zipEntry] of Object.entries(zipContents.files)) {
         if (zipEntry.dir || path.startsWith('.next/') || path.startsWith('dist/') || path.includes('dist/') || path.startsWith('node_modules/') || path.includes('node_modules/') ||  path.includes('.next/') || path.startsWith('public/') || path.includes('public/') || 
-    path.endsWith('.env'))) {
+        path.endsWith('.env') )  {
           // Skip directories and anything within .next folder
           continue;
         }

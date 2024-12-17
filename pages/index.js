@@ -298,8 +298,8 @@ export default function GitHubSync() {
             Modify your GitHub repositories with Bolt Prompts & sync changes back to GitHub with BoltSync.
           </p>
           <p className="text-gray-300 text-center max-w-3xl mx-auto mb-3">
-              Help spread the word! If you find BoltSync useful, please share the LinkedIn post and connect with me.
-            </p>
+            Help fuel this project's growth! If you find BoltSync valuable, consider supporting its development.
+          </p>
           <div className="flex justify-center gap-3">
             <a
               href="https://github.com/Labhk/BoltSync-Issues/issues/new"
@@ -313,21 +313,13 @@ export default function GitHubSync() {
               <span>Report Issue</span>
             </a>
             <a
-              href="https://www.linkedin.com/posts/labh-k_github-bolt-webdevelopment-activity-7268152010728742912-v4BT"
+              href="https://support.mystify.tech/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200"
             >
-              <Linkedin className="w-4 h-4" />
-              <span>Share BoltSync</span>
-            </a>
-            <a
-              href="https://www.linkedin.com/in/labh-k/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center space-x-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors duration-200"
-            >
-              <span>Connect on LinkedIn</span>
+              <Heart className="w-4 h-4 text-red-500" />
+              <span>Support My Work</span>
             </a>
           </div>
         </div>

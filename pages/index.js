@@ -3,6 +3,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { Octokit } from "@octokit/rest";
 import JSZip from 'jszip';
 import { Github, Heart, Search, X, Linkedin } from 'lucide-react';
+import posthog from 'posthog-js'
 
 export default function GitHubSync() {
   const { data: session } = useSession();
@@ -112,6 +113,7 @@ export default function GitHubSync() {
 
   // Recursively fetch repository contents
   const fetchRepoContents = async (owner, repo, path = '') => {
+    posthog.capture('fetchign the repos', { owner: owner, path: path })
     const { data } = await octokit.repos.getContent({
       owner,
       repo,
@@ -188,6 +190,7 @@ export default function GitHubSync() {
 
   // Detect changes between repo and uploaded files
   const detectChanges = (uploadedFiles) => {
+    posthog.capture('fetchign the repos', { owner: owner, path: path })
     if (isRepoFetching || isZipProcessing) {
       // Avoid detecting changes while fetching repo files or processing zip
       return;
@@ -281,6 +284,10 @@ export default function GitHubSync() {
     }
   };
 
+  const handleReportIssueClick = () => {
+    posthog.capture('Reporting Issue', { test: "1" });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 p-4 md:p-8">
       {/* Header Section */}
@@ -305,6 +312,7 @@ export default function GitHubSync() {
               href="https://github.com/Labhk/BoltSync-Issues/issues/new"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={handleReportIssueClick}
               className="inline-flex items-center space-x-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-lg transition-colors duration-200"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

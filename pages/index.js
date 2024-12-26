@@ -113,7 +113,6 @@ export default function GitHubSync() {
 
   // Recursively fetch repository contents
   const fetchRepoContents = async (owner, repo, path = '') => {
-    posthog.capture('fetchign the repos', { owner: owner, path: path })
     const { data } = await octokit.repos.getContent({
       owner,
       repo,
@@ -190,7 +189,6 @@ export default function GitHubSync() {
 
   // Detect changes between repo and uploaded files
   const detectChanges = (uploadedFiles) => {
-    posthog.capture('fetchign the repos', { owner: owner, path: path })
     if (isRepoFetching || isZipProcessing) {
       // Avoid detecting changes while fetching repo files or processing zip
       return;

@@ -341,46 +341,79 @@ export default function GitHubSync() {
 
     try {
       const [owner, repo] = selectedRepo.split('/');
-      let successCount = 0;
+      const message = customMessage || `Updated ${selectedChanges.length} files [BoltSync]`;
 
-      // Only process selected changes
+      // Create a tree with all changes
+      const baseCommit = await octokit.repos.getCommit({
+        owner,
+        repo,
+        ref: 'heads/main' // You might want to make this configurable
+      });
+
+      const tree = [];
+      
+      // Add all selected changes to the tree
       for (const index of selectedChanges) {
         const change = changes[index];
-        try {
-          const message = customMessage || `${change.type} ${change.path} [BoltSync]`;
+        
+        if (change.type === 'deleted') {
+          tree.push({
+            path: change.path,
+            mode: '100644',
+            type: 'blob',
+            sha: null // null SHA means delete the file
+          });
+        } else {
+          const content = change.content;
+          const blobData = await octokit.git.createBlob({
+            owner,
+            repo,
+            content: Buffer.from(content).toString('base64'),
+            encoding: 'base64'
+          });
 
-          if (change.type === 'deleted') {
-            await octokit.repos.deleteFile({
-              owner,
-              repo,
-              path: change.path,
-              message,
-              sha: change.sha
-            });
-          } else {
-            const content = Buffer.from(change.content).toString('base64');
-            await octokit.repos.createOrUpdateFileContents({
-              owner,
-              repo,
-              path: change.path,
-              message,
-              content,
-              ...(change.type === 'modified' ? { sha: repoFiles[change.path].sha } : {})
-            });
-          }
-          successCount++;
-        } catch (error) {
-          console.error(`Failed to ${change.type} ${change.path}:`, error);
+          tree.push({
+            path: change.path,
+            mode: '100644',
+            type: 'blob',
+            sha: blobData.data.sha
+          });
         }
       }
 
-      setStatus(`Successfully pushed ${successCount} out of ${selectedChanges.length} changes`);
+      // Create a new tree
+      const newTree = await octokit.git.createTree({
+        owner,
+        repo,
+        base_tree: baseCommit.data.commit.tree.sha,
+        tree
+      });
+
+      // Create a new commit
+      const newCommit = await octokit.git.createCommit({
+        owner,
+        repo,
+        message,
+        tree: newTree.data.sha,
+        parents: [baseCommit.data.sha]
+      });
+
+      // Update the reference
+      await octokit.git.updateRef({
+        owner,
+        repo,
+        ref: 'heads/main', // You might want to make this configurable
+        sha: newCommit.data.sha
+      });
+
+      setStatus(`Successfully pushed ${selectedChanges.length} changes.`);
       setChanges([]);
       setCommitMessage('');
       setShowCommitModal(false);
 
     } catch (error) {
       setStatus("Error pushing changes: " + error.message);
+      console.error("Detailed error:", error);
     }
     setIsProcessing(false);
   };

@@ -4,7 +4,6 @@ import { Octokit } from "@octokit/rest";
 import JSZip from 'jszip';
 import { Github, Heart, Search, X, Linkedin, Eye } from 'lucide-react';
 import posthog from 'posthog-js'
-import Head from 'next/head';
 
 const FilePreviewModal = ({ change, onClose }) => {
   // For modified files, split the content to show both versions
@@ -425,136 +424,107 @@ export default function GitHubSync() {
   };
 
   return (
-    <>
-      <Head>
-        <title>BoltSync - Sync GitHub Repositories with Bolt.new</title>
-        <meta name="description" content="BoltSync helps you seamlessly sync changes between Bolt.new and GitHub repositories. Make AI-powered code modifications and push changes back to GitHub effortlessly." />
-        
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://boltsync.dev" />
-        <meta property="og:title" content="BoltSync - Sync GitHub Repositories with Bolt.new" />
-        <meta property="og:description" content="BoltSync helps you seamlessly sync changes between Bolt.new and GitHub repositories. Make AI-powered code modifications and push changes back to GitHub effortlessly." />
-        <meta property="og:image" content="https://boltsync.dev/og-image.png" />
-
-        {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://boltsync.dev" />
-        <meta property="twitter:title" content="BoltSync - Sync GitHub Repositories with Bolt.new" />
-        <meta property="twitter:description" content="BoltSync helps you seamlessly sync changes between Bolt.new and GitHub repositories. Make AI-powered code modifications and push changes back to GitHub effortlessly." />
-        <meta property="twitter:image" content="https://boltsync.dev/og-image.png" />
-
-        {/* Additional SEO tags */}
-        <meta name="keywords" content="GitHub, Bolt.new, repository sync, code modification, AI coding, version control, developer tools" />
-        <meta name="author" content="BoltSync" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="canonical" href="https://boltsync.dev" />
-        
-        {/* Favicon */}
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 p-4 md:p-8">
-        {/* Header Section */}
-        <div className="max-w-5xl mx-auto mb-8">
-          <div className="bg-black/30 rounded-2xl p-8 backdrop-blur-lg border border-gray-700">
-            <div className="flex items-center justify-center space-x-4 mb-6">
-              <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <h1 className="text-4xl font-bold text-white">BoltSync</h1>
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 p-4 md:p-8">
+      {/* Header Section */}
+      <div className="max-w-5xl mx-auto mb-8">
+        <div className="bg-black/30 rounded-2xl p-8 backdrop-blur-lg border border-gray-700">
+          <div className="flex items-center justify-center space-x-4 mb-6">
+            <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
             </div>
-            <p className="text-gray-300 text-center max-w-3xl mx-auto mb-2">
-              Modify your GitHub repositories with Bolt Prompts & sync changes back to GitHub with BoltSync.
-            </p>
-            <p className="text-gray-300 text-center max-w-3xl mx-auto mb-3">
-              Help fuel this project's growth! If you find BoltSync valuable, consider supporting its development.
-            </p>
-            <div className="flex justify-center gap-3">
-              <a
-                href="https://github.com/Labhk/BoltSync-Issues/issues/new"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={handleReportIssueClick}
-                className="inline-flex items-center space-x-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-lg transition-colors duration-200"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-                <span>Report Issue</span>
-              </a>
-              <a
-                href="https://support.mystify.tech/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200"
-              >
-                <Heart className="w-4 h-4 text-red-500" />
-                <span>Support My Work</span>
-              </a>
-            </div>
+            <h1 className="text-4xl font-bold text-white">BoltSync</h1>
+          </div>
+          <p className="text-gray-300 text-center max-w-3xl mx-auto mb-2">
+            Modify your GitHub repositories with Bolt Prompts & sync changes back to GitHub with BoltSync.
+          </p>
+          <p className="text-gray-300 text-center max-w-3xl mx-auto mb-3">
+            Help fuel this project's growth! If you find BoltSync valuable, consider supporting its development.
+          </p>
+          <div className="flex justify-center gap-3">
+            <a
+              href="https://github.com/Labhk/BoltSync-Issues/issues/new"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={handleReportIssueClick}
+              className="inline-flex items-center space-x-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-lg transition-colors duration-200"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <span>Report Issue</span>
+            </a>
+            <a
+              href="https://support.mystify.tech/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200"
+            >
+              <Heart className="w-4 h-4 text-red-500" />
+              <span>Support My Work</span>
+            </a>
           </div>
         </div>
+      </div>
 
-        <div className="max-w-5xl mx-auto">
-          <div className="bg-black/30 backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden border border-gray-700">
-            {!session ? (
-              <div className="p-8 text-center space-y-6">
-                {/* Instructions for non-authenticated users */}
-                <div className="max-w-2xl mx-auto bg-gray-800/50 rounded-xl p-6">
-                  <h2 className="text-xl font-semibold text-white mb-4">Getting Started</h2>
-                  <ol className="text-gray-300 text-left space-y-4">
-                    <li className="flex items-start">
-                      <span className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">1</span>
-                      <span>Install the GitHub App (one-time setup)</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">2</span>
-                      <span>Sign in with your GitHub account</span>
-                    </li>
-                  </ol>
-                </div>
-                
-                <div className="flex justify-center gap-4">
-                  <button
-                    onClick={handleGitHubAppInstall}
-                    className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-blue-500/25"
-                  >
-                    Install GitHub App
-                  </button>
-                  <button
-                    onClick={() => signIn("github")}
-                    className="px-6 py-3 bg-gradient-to-r from-gray-800 to-gray-900 text-white font-medium rounded-xl hover:from-gray-900 hover:to-black transition-all duration-200 shadow-lg hover:shadow-gray-800/25 flex items-center gap-2"
-                  >
-                    <Github className="w-5 h-5" />
-                    Sign in with GitHub
-                  </button>
-                </div>
+      <div className="max-w-5xl mx-auto">
+        <div className="bg-black/30 backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden border border-gray-700">
+          {!session ? (
+            <div className="p-8 text-center space-y-6">
+              {/* Instructions for non-authenticated users */}
+              <div className="max-w-2xl mx-auto bg-gray-800/50 rounded-xl p-6">
+                <h2 className="text-xl font-semibold text-white mb-4">Getting Started</h2>
+                <ol className="text-gray-300 text-left space-y-4">
+                  <li className="flex items-start">
+                    <span className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">1</span>
+                    <span>Install the GitHub App (one-time setup)</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm mr-3 mt-0.5">2</span>
+                    <span>Sign in with your GitHub account</span>
+                  </li>
+                </ol>
               </div>
-            ) : (
-              <div className="p-8 space-y-6">
-                {/* Authenticated User Header */}
-                <div className="flex justify-between items-center pb-6 border-b border-gray-700">
-                  <div className="flex items-center space-x-4">
-                    <img src={session.user?.image} alt="Profile" className="w-10 h-10 rounded-full" />
-                    <div>
-                      <p className="text-white font-medium">{session.user?.name}</p>
-                      <p className="text-gray-400 text-sm">{session.user?.email}</p>
-                    </div>
+              
+              <div className="flex justify-center gap-4">
+                <button
+                  onClick={handleGitHubAppInstall}
+                  className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-blue-500/25"
+                >
+                  Install GitHub App
+                </button>
+                <button
+                  onClick={() => signIn("github")}
+                  className="px-6 py-3 bg-gradient-to-r from-gray-800 to-gray-900 text-white font-medium rounded-xl hover:from-gray-900 hover:to-black transition-all duration-200 shadow-lg hover:shadow-gray-800/25 flex items-center gap-2"
+                >
+                  <Github className="w-5 h-5" />
+                  Sign in with GitHub
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="p-8 space-y-6">
+              {/* Authenticated User Header */}
+              <div className="flex justify-between items-center pb-6 border-b border-gray-700">
+                <div className="flex items-center space-x-4">
+                  <img src={session.user?.image} alt="Profile" className="w-10 h-10 rounded-full" />
+                  <div>
+                    <p className="text-white font-medium">{session.user?.name}</p>
+                    <p className="text-gray-400 text-sm">{session.user?.email}</p>
                   </div>
-                  <button
-                    onClick={() => signOut()}
-                    className="px-4 py-2 text-gray-300 hover:text-white hover:bg-red-500/20 rounded-lg transition-colors"
-                  >
-                    Sign Out
-                  </button>
                 </div>
+                <button
+                  onClick={() => signOut()}
+                  className="px-4 py-2 text-gray-300 hover:text-white hover:bg-red-500/20 rounded-lg transition-colors"
+                >
+                  Sign Out
+                </button>
+              </div>
 
-                {/* Repository Selection */}
-                <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-4">
+              {/* Repository Selection */}
+              <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-4">
           {/* Search Input */}
               <div className="relative">
                 <div className="flex items-center">
@@ -850,6 +820,6 @@ export default function GitHubSync() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

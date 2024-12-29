@@ -2,8 +2,60 @@ import React, { useState, useEffect } from 'react';
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Octokit } from "@octokit/rest";
 import JSZip from 'jszip';
-import { Github, Heart, Search, X, Linkedin } from 'lucide-react';
+import { Github, Heart, Search, X, Linkedin, Eye } from 'lucide-react';
 import posthog from 'posthog-js'
+
+const FilePreviewModal = ({ change, onClose }) => {
+  // For modified files, split the content to show both versions
+  const showDiff = change.type === 'modified' && change.oldContent;
+
+  return (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-gray-800 rounded-xl w-full max-w-4xl mx-4 border border-gray-700 max-h-[90vh] flex flex-col">
+        <div className="p-4 border-b border-gray-700 flex justify-between items-center">
+          <h3 className="text-xl font-semibold text-white">
+            {change.path} {change.type === 'modified' && '(Modified)'}
+          </h3>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-white"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+        <div className="overflow-auto p-4 flex-1">
+          {showDiff ? (
+            <div className="grid grid-cols-1 gap-4">
+              <div className="space-y-2 bg-green-200 p-2 rounded-md">
+                <div className="text-sm font-medium text-gray-900">New Version</div>
+                <pre className="text-sm">
+                  <code className={`language-${change.path.split('.').pop()} text-gray-900`}>
+                    {change.content}
+                  </code>
+                </pre>
+              </div>
+              <div className="space-y-2 bg-red-200 rounded-md p-2">
+                <div className="text-sm font-medium text-gray-900">Original Version</div>
+                <pre className="text-sm">
+                  <code className={`language-${change.path.split('.').pop()} text-gray-900`}>
+                    {change.oldContent}
+                  </code>
+                </pre>
+              </div>
+              
+            </div>
+          ) : (
+            <pre className="text-sm">
+              <code className={`language-${change.path.split('.').pop()} text-gray-300`}>
+                {change.content}
+              </code>
+            </pre>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default function GitHubSync() {
   const { data: session } = useSession();
@@ -19,6 +71,19 @@ export default function GitHubSync() {
   const [isZipProcessing, setIsZipProcessing] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearchActive, setIsSearchActive] = useState(false);
+  const [showCommitModal, setShowCommitModal] = useState(false);
+  const [commitMessage, setCommitMessage] = useState('');
+  const [gitignorePatterns, setGitignorePatterns] = useState([
+    // Default patterns to always ignore
+    'node_modules/**', '.next/**', 'dist/**', 'public/**', '.env',
+    // Common patterns
+    'logs/**', '*.log', 'npm-debug.log*', 'yarn-debug.log*', 'yarn-error.log*',
+    'pnpm-debug.log*', 'lerna-debug.log*', 'dist-ssr/**', '*.local',
+    '.vscode/**', '.idea/**', '.DS_Store', '*.suo', '*.ntvs*', '*.njsproj',
+    '*.sln', '*.sw?'
+  ]);
+  const [selectedChanges, setSelectedChanges] = useState([]);
+  const [previewChange, setPreviewChange] = useState(null);
 
   // Filter repositories based on search term
   const filteredRepos = repos.filter(repo => 
@@ -153,7 +218,6 @@ export default function GitHubSync() {
       return;
     }
 
-    // Prevent detecting changes during processing
     setStatus("Processing zip file...");
     setIsZipProcessing(true);
 
@@ -162,10 +226,35 @@ export default function GitHubSync() {
       const zipContents = await zip.loadAsync(file);
       const files = {};
 
+      // Read .gitignore if it exists in the zip
+      const gitignoreFile = zipContents.files['.gitignore'] || zipContents.files['project/.gitignore'];
+      if (gitignoreFile) {
+        const gitignoreContent = await gitignoreFile.async('string');
+        const additionalPatterns = gitignoreContent
+          .split('\n')
+          .map(line => line.trim())
+          .filter(line => line && !line.startsWith('#'));
+        setGitignorePatterns(prevPatterns => [...prevPatterns, ...additionalPatterns]);
+      }
+
+      // Helper function to check if a path should be ignored
+      const shouldIgnorePath = (path) => {
+        // Always ignore directories
+        if (path.endsWith('/')) return true;
+
+        return gitignorePatterns.some(pattern => {
+          // Convert gitignore pattern to regex
+          const regexPattern = pattern
+            .replace(/\*/g, '.*') // Convert * to .*
+            .replace(/\?/g, '.'); // Convert ? to .
+          const regex = new RegExp(`^${regexPattern}$`);
+          return regex.test(path) || path.includes(pattern.replace(/\*/g, ''));
+        });
+      };
+
       for (const [path, zipEntry] of Object.entries(zipContents.files)) {
-        if (zipEntry.dir || path.startsWith('.next/') || path.startsWith('dist/') || path.includes('dist/') || path.startsWith('node_modules/') || path.includes('node_modules/') ||  path.includes('.next/') || path.startsWith('public/') || path.includes('public/') || 
-        path.endsWith('.env') )  {
-          // Skip directories and anything within .next folder
+        // Skip directories and ignored files
+        if (zipEntry.dir || shouldIgnorePath(path)) {
           continue;
         }
 
@@ -181,6 +270,7 @@ export default function GitHubSync() {
 
       setUploadedFiles(files);
       detectChanges(files);
+      
     } catch (error) {
       setStatus("Error processing zip file: " + error.message);
     }
@@ -190,7 +280,6 @@ export default function GitHubSync() {
   // Detect changes between repo and uploaded files
   const detectChanges = (uploadedFiles) => {
     if (isRepoFetching || isZipProcessing) {
-      // Avoid detecting changes while fetching repo files or processing zip
       return;
     }
 
@@ -203,7 +292,8 @@ export default function GitHubSync() {
           changes.push({
             path,
             type: 'modified',
-            content: file.content
+            content: file.content,
+            oldContent: repoFiles[path].content
           });
         }
       } else {
@@ -215,13 +305,36 @@ export default function GitHubSync() {
       }
     });
 
+    // Check for deleted files
+    Object.keys(repoFiles).forEach(path => {
+      // Skip if file exists in uploaded files
+      if (uploadedFiles[path]) return;
+
+      // Skip files that match gitignore patterns
+      const shouldIgnore = gitignorePatterns.some(pattern => {
+        const regexPattern = pattern
+          .replace(/\*/g, '.*')
+          .replace(/\?/g, '.');
+        const regex = new RegExp(`^${regexPattern}$`);
+        return regex.test(path) || path.includes(pattern.replace(/\*/g, ''));
+      });
+
+      if (!shouldIgnore) {
+        changes.push({
+          path,
+          type: 'deleted',
+          sha: repoFiles[path].sha
+        });
+      }
+    });
+
     setChanges(changes);
     setStatus(`Found ${changes.length} changes`);
   };
 
   // Push changes to GitHub
-  const pushChanges = async () => {
-    if (!selectedRepo || changes.length === 0) return;
+  const pushChanges = async (customMessage) => {
+    if (!selectedRepo || selectedChanges.length === 0) return;
 
     setStatus("Pushing changes to GitHub...");
     setIsProcessing(true);
@@ -230,38 +343,41 @@ export default function GitHubSync() {
       const [owner, repo] = selectedRepo.split('/');
       let successCount = 0;
 
-      for (const change of changes) {
+      // Only process selected changes
+      for (const index of selectedChanges) {
+        const change = changes[index];
         try {
-          const content = Buffer.from(change.content).toString('base64');
-          const message = `Update ${change.path} [BoltSync]`;
+          const message = customMessage || `${change.type} ${change.path} [BoltSync]`;
 
-          if (change.type === 'modified') {
+          if (change.type === 'deleted') {
+            await octokit.repos.deleteFile({
+              owner,
+              repo,
+              path: change.path,
+              message,
+              sha: change.sha
+            });
+          } else {
+            const content = Buffer.from(change.content).toString('base64');
             await octokit.repos.createOrUpdateFileContents({
               owner,
               repo,
               path: change.path,
               message,
               content,
-              sha: repoFiles[change.path].sha
-            });
-          } else if (change.type === 'added') {
-            await octokit.repos.createOrUpdateFileContents({
-              owner,
-              repo,
-              path: change.path,
-              message,
-              content
+              ...(change.type === 'modified' ? { sha: repoFiles[change.path].sha } : {})
             });
           }
           successCount++;
         } catch (error) {
-          console.error(`Failed to push ${change.path}:`, error);
+          console.error(`Failed to ${change.type} ${change.path}:`, error);
         }
       }
 
-      setStatus(`Successfully pushed ${successCount} out of ${changes.length} changes`);
+      setStatus(`Successfully pushed ${successCount} out of ${selectedChanges.length} changes`);
       setChanges([]);
-      setStatus("Changes successfully pushed!");
+      setCommitMessage('');
+      setShowCommitModal(false);
 
     } catch (error) {
       setStatus("Error pushing changes: " + error.message);
@@ -284,6 +400,27 @@ export default function GitHubSync() {
 
   const handleReportIssueClick = () => {
     posthog.capture('Reporting Issue', { test: "1" });
+  };
+
+  const handlePushChangesClick = () => {
+    setShowCommitModal(true);
+  };
+
+  // Update useEffect when changes are set
+  useEffect(() => {
+    // When changes are detected, select all by default
+    setSelectedChanges(changes.map((_, index) => index));
+  }, [changes]);
+
+  // Add handler for checkbox changes
+  const handleChangeSelection = (index) => {
+    setSelectedChanges(prev => {
+      if (prev.includes(index)) {
+        return prev.filter(i => i !== index);
+      } else {
+        return [...prev, index];
+      }
+    });
   };
 
   return (
@@ -503,27 +640,51 @@ export default function GitHubSync() {
 
                     {changes.length > 0 && (
                       <div className="bg-gray-800/50 rounded-xl p-6">
-                        <h3 className="text-lg font-semibold text-white mb-4">Detected Changes</h3>
+                        <div className="flex justify-between items-center mb-4">
+                          <h3 className="text-lg font-semibold text-white">Detected Changes</h3>
+                          <div className="text-sm text-gray-300">
+                            {selectedChanges.length} of {changes.length} selected
+                          </div>
+                        </div>
                         <div className="max-h-60 overflow-y-auto space-y-2">
                           {changes.map((change, index) => (
-                            <div key={index} className="p-3 bg-gray-800 rounded-lg flex items-center">
-                              <span className={`mr-3 px-3 py-1 rounded-md text-sm ${
-                                change.type === 'modified' 
-                                  ? 'bg-yellow-500/20 text-yellow-300' 
-                                  : 'bg-green-500/20 text-green-300'
-                              }`}>
-                                {change.type}
-                              </span>
-                              <span className="text-gray-300 truncate">{change.path}</span>
+                            <div key={index} className="p-3 bg-gray-800 rounded-lg flex items-center justify-between">
+                              <div className="flex items-center flex-1">
+                                <input
+                                  type="checkbox"
+                                  checked={selectedChanges.includes(index)}
+                                  onChange={() => handleChangeSelection(index)}
+                                  className="mr-3 w-4 h-4 rounded text-blue-500 focus:ring-blue-500 focus:ring-offset-gray-800"
+                                />
+                                <span className={`mr-3 px-3 py-1 rounded-md text-sm ${
+                                  change.type === 'modified' 
+                                    ? 'bg-yellow-500/20 text-yellow-300' 
+                                    : change.type === 'deleted'
+                                      ? 'bg-red-500/20 text-red-300'
+                                      : 'bg-green-500/20 text-green-300'
+                                }`}>
+                                  {change.type}
+                                </span>
+                                <span className="text-gray-300 truncate">{change.path}</span>
+                              </div>
+                              {change.type !== 'deleted' && (
+                                <button
+                                  onClick={() => setPreviewChange(change)}
+                                  className="ml-2 p-2 text-gray-400 hover:text-white rounded-lg hover:bg-gray-700 transition-colors"
+                                  title="Preview changes"
+                                >
+                                  <Eye className="w-4 h-4" />
+                                </button>
+                              )}
                             </div>
                           ))}
                         </div>
                         <button
-                          onClick={pushChanges}
-                          disabled={isProcessing}
+                          onClick={handlePushChangesClick}
+                          disabled={isProcessing || selectedChanges.length === 0}
                           className="mt-4 w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 px-4 rounded-xl hover:from-green-600 hover:to-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium"
                         >
-                          Push Changes to GitHub
+                          Push {selectedChanges.length} Changes to GitHub
                         </button>
                       </div>
                     )}
@@ -531,6 +692,8 @@ export default function GitHubSync() {
                     
                   </div>
                 )}
+
+                
 
                 {status && (
                   <div className={`p-4 rounded-xl ${
@@ -587,6 +750,43 @@ export default function GitHubSync() {
             </ol>
           </div>
         </div>
+
+        {showCommitModal && (
+                  <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+                    <div className="bg-gray-800 rounded-xl p-6 w-full max-w-md mx-4 border border-gray-700">
+                      <h3 className="text-xl font-semibold text-white mb-4">Commit Message</h3>
+                      <input
+                        type="text"
+                        placeholder="Enter commit message (optional)"
+                        value={commitMessage}
+                        onChange={(e) => setCommitMessage(e.target.value)}
+                        className="w-full p-3 bg-gray-700 text-white border border-gray-600 rounded-lg mb-4 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                      <div className="flex justify-end gap-3">
+                        <button
+                          onClick={() => setShowCommitModal(false)}
+                          className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={() => pushChanges(commitMessage)}
+                          disabled={isProcessing}
+                          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          Confirm
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+        {previewChange && (
+          <FilePreviewModal
+            change={previewChange}
+            onClose={() => setPreviewChange(null)}
+          />
+        )}
 
         <div class="mt-8 bg-black/30 backdrop-blur-lg rounded-2xl p-8 md:p-12 lg:p-16 border border-gray-700">
           <h2 class="text-2xl md:text-3xl lg:text-4xl text-center font-bold text-white mb-6">Video Demo</h2>

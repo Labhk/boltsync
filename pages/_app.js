@@ -20,21 +20,21 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
     <>
       <Head>
         {/* Primary Meta Tags */}
-        <title>BoltSync - GitHub Repository Management with AI</title>
-        <meta name="title" content="BoltSync - GitHub Repository Management with AI" />
+        <title>BoltSync - GitHub Repository Management with Bolt</title>
+        <meta name="title" content="BoltSync - GitHub Repository Management with Bolt" />
         <meta name="description" content="Modify your GitHub repositories with Bolt Prompts & sync changes back to GitHub with BoltSync. Streamline your development workflow with AI-powered repository management." />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://boltsync.dev" />
-        <meta property="og:title" content="BoltSync - GitHub Repository Management with AI" />
+        <meta property="og:title" content="BoltSync - GitHub Repository Management with Bolt" />
         <meta property="og:description" content="Modify your GitHub repositories with Bolt Prompts & sync changes back to GitHub with BoltSync. Streamline your development workflow with AI-powered repository management." />
         <meta property="og:image" content="https://boltsync.dev/og-image.png" />
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://boltsync.dev" />
-        <meta property="twitter:title" content="BoltSync - GitHub Repository Management with AI" />
+        <meta property="twitter:title" content="BoltSync - GitHub Repository Management with Bolt" />
         <meta property="twitter:description" content="Modify your GitHub repositories with Bolt Prompts & sync changes back to GitHub with BoltSync. Streamline your development workflow with AI-powered repository management." />
         <meta property="twitter:image" content="https://boltsync.dev/og-image.png" />
 

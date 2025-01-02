@@ -70,6 +70,13 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
             `,
           }}
         />
+
+        {/* Pikapod Script */}
+        <script 
+          defer 
+          src="https://romantic-swift.pikapod.net/script.js" 
+          data-website-id="1722e375-f169-45f9-aab6-9797ac8a3659">
+        </script>
       </Head>
 
       <PostHogProvider client={posthog}>
